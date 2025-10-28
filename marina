@@ -1,0 +1,147 @@
+#include <stdio.h>
+
+#define TAM 8
+
+
+void mostrarTabuleiro(char tab[TAM][TAM]) {
+    printf("\n");
+    for (int i = 0; i < TAM; i++) {
+        for (int j = 0; j < TAM; j++) {
+            printf("%c ", tab[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+
+void limparTabuleiro(char tab[TAM][TAM]) {
+    for (int i = 0; i < TAM; i++) {
+        for (int j = 0; j < TAM; j++) {
+            tab[i][j] = '.';
+        }
+    }
+}
+
+
+void marcarMovimento(char tab[TAM][TAM], int l, int c) {
+    if (l >= 0 && l < TAM && c >= 0 && c < TAM)
+        tab[l][c] = 'x';
+}
+
+
+void moverTorre(char tab[TAM][TAM], int l, int c) {
+    for (int i = 0; i < TAM; i++) {
+        marcarMovimento(tab, l, i); 
+        marcarMovimento(tab, i, c); 
+    }
+}
+
+
+void moverBispo(char tab[TAM][TAM], int l, int c) {
+    int i, j;
+
+    
+    i = l + 1; j = c + 1;
+    while (i < TAM && j < TAM) {
+        marcarMovimento(tab, i, j);
+        i++; j++;
+    }
+
+    
+    i = l + 1; j = c - 1;
+    while (i < TAM && j >= 0) {
+        marcarMovimento(tab, i, j);
+        i++; j--;
+    }
+
+    
+    i = l - 1; j = c - 1;
+    while (i >= 0 && j >= 0) {
+        marcarMovimento(tab, i, j);
+        i--; j--;
+    }
+
+    
+    i = l - 1; j = c + 1;
+    while (i >= 0 && j < TAM) {
+        marcarMovimento(tab, i, j);
+        i--; j++;
+    }
+}
+
+
+void moverRainha(char tab[TAM][TAM], int l, int c) {
+    int i, j;
+
+    
+    i = 0;
+    do {
+        marcarMovimento(tab, l, i);
+        marcarMovimento(tab, i, c);
+        i++;
+    } while (i < TAM);
+
+    
+    i = l + 1; j = c + 1;
+    do {
+        if (i >= TAM || j >= TAM) break;
+        marcarMovimento(tab, i, j);
+        i++; j++;
+    } while (1);
+
+    i = l - 1; j = c - 1;
+    do {
+        if (i < 0 || j < 0) break;
+        marcarMovimento(tab, i, j);
+        i--; j--;
+    } while (1);
+
+    i = l + 1; j = c - 1;
+    do {
+        if (i >= TAM || j < 0) break;
+        marcarMovimento(tab, i, j);
+        i++; j--;
+    } while (1);
+
+    i = l - 1; j = c + 1;
+    do {
+        if (i < 0 || j >= TAM) break;
+        marcarMovimento(tab, i, j);
+        i--; j++;
+    } while (1);
+}
+
+
+int main() {
+    char tab[TAM][TAM];
+    int linha, coluna, opcao;
+
+    do {
+        printf("\n=== MÓDULO NOVATO: MOVIMENTOS LINEARES ===\n");
+        printf("1 - Torre (usa for)\n");
+        printf("2 - Bispo (usa while)\n");
+        printf("3 - Rainha (usa do-while)\n");
+        printf("0 - Sair\n");
+        printf("Escolha a peça: ");
+        scanf("%d", &opcao);
+
+        if (opcao == 0) break;
+
+        printf("Digite a posição (linha 0-7, coluna 0-7): ");
+        scanf("%d %d", &linha, &coluna);
+
+        limparTabuleiro(tab);
+        tab[linha][coluna] = 'P'; 
+
+        if (opcao == 1) moverTorre(tab, linha, coluna);
+        else if (opcao == 2) moverBispo(tab, linha, coluna);
+        else if (opcao == 3) moverRainha(tab, linha, coluna);
+        else printf("Opção inválida!\n");
+
+        mostrarTabuleiro(tab);
+
+    } while (opcao != 0);
+
+    printf("\nSaindo do módulo novato...\n");
+    return 0;
+}
